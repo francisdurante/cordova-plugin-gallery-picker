@@ -33,6 +33,9 @@
 		<source-file src="src/android/layout/header_layout.xml" target-dir="res/layout" />
 		
 		
+		<source-file src="src/android/menu/navigation.xml" target-dir="res/menu" />
+		
+		
 		<source-file src="src/android/drawable/ic_play_button.xml" target-dir="res/drawable" />
 		
 		<config-file target="res/values/strings.xml" parent="/*">

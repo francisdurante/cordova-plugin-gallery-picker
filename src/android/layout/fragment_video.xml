@@ -20,8 +20,7 @@
     android:stretchMode="columnWidth"
     android:verticalSpacing="5sp"
     android:horizontalSpacing="5sp"
-    android:drawSelectorOnTop="true"
-    android:listSelector="@drawable/grid_selector">
+    android:drawSelectorOnTop="true">
 
   </GridView>
 </RelativeLayout>
