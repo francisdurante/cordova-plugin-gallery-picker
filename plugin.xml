@@ -10,7 +10,7 @@
 	<framework src="com.github.bumptech.glide:glide:4.9.0" />
 		<config-file parent="/*" target="res/xml/config.xml">
 			<feature name="callImagePicker">
-				<param name="android-package" value="cordova.plugin.gallery.ImagePicker" />
+				<param name="android-package" value="cordova.plugin.gallery.picker.ImagePicker" />
 			</feature>
 		</config-file>
 		
