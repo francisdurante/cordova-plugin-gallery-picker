@@ -1,0 +1,14 @@
+{
+  "name": "cordova-plugin-gallery-picker",
+  "version": "0.0.1",
+  "description": "image picker",
+  "cordova": {
+    "id": "cordova-plugin-gallery-picker",
+    "platforms": []
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Francis Durante",
+  "license": "ISC"
+}

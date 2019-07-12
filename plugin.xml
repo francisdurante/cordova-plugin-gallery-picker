@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-gallery-picker" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+	<name>
+		cordova-gallery-picker
+	</name>
+	<js-module name="cordova-gallery-picker" src="www/cordova-gallery-picker.js">
+		<clobbers target="cordova.plugins" />
+	</js-module>
+	<platform name="android">
+	<framework src="com.github.bumptech.glide:glide:4.9.0" />
+		<config-file parent="/*" target="res/xml/config.xml">
+			<feature name="callImagePicker">
+				<param name="android-package" value="cordova.plugin.gallery.ImagePicker" />
+			</feature>
+		</config-file>
+		
+		<config-file parent="/manifest/application" target="AndroidManifest.xml">
+		  <activity android:label="@string/activity_name" android:launchMode="singleTop" android:name="cordova.plugin.gallery.picker.MainActivity" android:theme="@style/Theme.AppCompat" android:windowSoftInputMode="adjustResize"/>
+		</config-file>
+		
+		<config-file parent="/*" target="AndroidManifest.xml">
+		
+		</config-file>
+		<source-file src="src/android/ImagePicker.java" target-dir="src/cordova/plugin/gallery/picker" />
+		<source-file src="src/android/FakeR.java" target-dir="src/cordova/plugin/gallery/picker" />
+		<source-file src="src/android/MainActivity.java" target-dir="src/cordova/plugin/gallery/picker" />
+		<source-file src="src/android/SlideShowFragment.java" target-dir="src/cordova/plugin/gallery/picker" />
+		<source-file src="src/android/VideoFragment.java" target-dir="src/cordova/plugin/gallery/picker" />
+		
+		<source-file src="src/android/layout/activity_main_gallery.xml" target-dir="res/layout" />
+		<source-file src="src/android/layout/fragment_slide_show.xml" target-dir="res/layout" />
+		<source-file src="src/android/layout/fragment_video.xml" target-dir="res/layout" />
+		<source-file src="src/android/layout/header_layout.xml" target-dir="res/layout" />
+		
+		
+		<source-file src="src/android/drawable/ic_play_button.xml" target-dir="res/drawable" />
+		
+		<config-file target="res/values/strings.xml" parent="/*">
+			<string name="title_slide_show">Slide Show</string>
+			<string name="title_video">Video</string>
+			<string name="title_pending">Pending</string>
+			<string name="select_photo">Select Photo</string>
+			<string name="next">Next</string>
+			<string-array name="array_name">
+				<item>Gallery</item>
+				<item>Camera</item>
+			</string-array>
+		</config-file>
+		<config-file target="res/values/styles.xml" parent="/*">
+			<style name="mySpinnerItemStyle" parent="ThemeOverlay.AppCompat.Dark">
+				<item name="android:textColor">#FFF</item>
+				<item name="android:color">#000</item>
+				<item name="android:textSize">20sp</item>
+			</style>
+		</config-file>
+
+	</platform>
+</plugin>
