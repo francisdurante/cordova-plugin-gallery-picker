@@ -28,12 +28,11 @@ public class ImagePicker extends CordovaPlugin {
 
    private void coolMethod(JSONArray args) {
 		Context context = this.cordova.getActivity().getApplicationContext();
-		openNewActivity(context,args);
+		openNewActivity(context);
     }
 
-	private void openNewActivity(Context context,JSONArray args) {
+	private void openNewActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
-		    intent.putExtra("PARAMETER", (Parcelable) args);
         this.cordova.getActivity().startActivity(intent);
     }
 }
