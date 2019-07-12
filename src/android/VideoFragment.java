@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,13 +68,12 @@ public class VideoFragment extends Fragment {
       @Override
       public void onClick(View v) {
         //return all selected images to app.\
-        Toast.makeText(getContext(), selectedImage.toString(), Toast.LENGTH_LONG).show();
-        JSONObject response = new JSONObject();
-        try {
-          response.put("video_response",selectedImage);
-        } catch (JSONException e) {
-          e.printStackTrace();
+        JSONArray response = new JSONArray();
+        for(int x = 0 ; x < selectedImage.size(); x++)
+        {
+          response.put(selectedImage.get(x));
         }
+        ImagePicker.callbackContext.success(response);
         ImagePicker.callbackContext.success(response);
         getActivity().finish();
       }
