@@ -71,25 +71,20 @@ public class SlideShowFragment extends Fragment {
     TextView next = view.findViewById(faker.getId("id","next"));
     spinner = view.findViewById(faker.getId("id","spinner"));
 
-    cancel.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        getActivity().finish();
-      }
+    cancel.setOnClickListener(v -> {
+      ImagePicker.callbackContext.error("USER_CANCEL");
+      getActivity().finish();
     });
 
-    next.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        //return all selected images to app.\
-        JSONArray response = new JSONArray();
-        for(int x = 0 ; x < selectedImage.size(); x++)
-        {
-          response.put(selectedImage.get(x));
-        }
-        ImagePicker.callbackContext.success(response);
-		    getActivity().finish();
+    next.setOnClickListener(v -> {
+      //return all selected images to app.\
+      JSONArray response = new JSONArray();
+      for(int x = 0 ; x < selectedImage.size(); x++)
+      {
+        response.put(selectedImage.get(x));
       }
+      ImagePicker.callbackContext.success(response);
+      getActivity().finish();
     });
 
     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

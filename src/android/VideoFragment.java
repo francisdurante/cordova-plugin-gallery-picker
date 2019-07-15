@@ -59,7 +59,12 @@ public class VideoFragment extends Fragment {
     TextView next = view.findViewById(faker.getId("id","next"));
     spinner = view.findViewById(faker.getId("id","spinner"));
 
-    cancel.setOnClickListener(v -> getActivity().finish());
+    cancel.setOnClickListener(v ->
+    {
+      ImagePicker.callbackContext.error("USER_CANCEL");
+      getActivity().finish();
+    }
+      );
 
     next.setOnClickListener(v -> {
       //return all selected images to app.\
