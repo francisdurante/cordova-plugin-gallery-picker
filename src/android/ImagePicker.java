@@ -20,19 +20,21 @@ public class ImagePicker extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		this.callbackContext = callbackContext;
         if (action.equals("coolMethod")) {
-            this.coolMethod(args);
+            boolean ifForComment = args.get(0).equals("comment");
+            this.coolMethod(ifForComment);
             return true;
         }
         return false;
     }
 
-   private void coolMethod(JSONArray args) {
+   private void coolMethod(boolean ifForComment) {
 		Context context = this.cordova.getActivity().getApplicationContext();
-		openNewActivity(context);
+		openNewActivity(context,ifForComment);
     }
 
-	private void openNewActivity(Context context) {
+	private void openNewActivity(Context context,boolean ifForComment) {
         Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("ifForComment",ifForComment);
         this.cordova.getActivity().startActivity(intent);
     }
 }

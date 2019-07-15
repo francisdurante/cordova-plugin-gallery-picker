@@ -18,7 +18,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-
   private FakeR faker;
   private Context context = this;
   private static final int REQUEST_WRITE_PERMISSION = 411;
@@ -53,6 +52,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
           case "Video":
             fragment = new VideoFragment();
             break;
+
+          case "Pending":
+            //Pending fragment
+            break;
         }
 
         return loadFragment(fragment);
@@ -61,11 +64,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    faker = new FakeR(context);
     super.onCreate(savedInstanceState);
+    faker = new FakeR(this);
+    Intent intent = getIntent();
+    boolean ifComment = intent.getBooleanExtra("ifForComment",false);
+    System.out.println(intent.getBooleanExtra("ifForComment",false) + " aaaaaaaaaaaaaaaaaaaaa");
     setContentView(faker.getId("layout","activity_main_gallery"));
     requestPermission();
     BottomNavigationView navigation = (BottomNavigationView) findViewById(faker.getId("id","navigation"));
+    if(ifComment)
+    {
+      navigation.getMenu().findItem(2).setVisible(false);
+    }
     navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
   }
 
