@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,10 +37,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -95,7 +98,9 @@ public class SlideShowFragment extends Fragment {
 
         if(spinner.getSelectedItem().toString().equals("Camera"))
         {
-          getActivity().startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 1000);
+//          getActivity().startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 1000);
+          ImagePicker.callbackContext.success("camera_request");
+          getActivity().finish();
         }
       }
 
@@ -133,8 +138,8 @@ public class SlideShowFragment extends Fragment {
     if (requestCode == 1000 && resultCode == RESULT_OK) {
       selectedFromCamera = new ArrayList<>();
       Bitmap bitmap = (Bitmap)data.getExtras().get("data") ;
-      saveImage(bitmap);
-      selectedFromCamera.add(saveImage(bitmap));
+//      saveImage(bitmap);
+        selectedFromCamera.add(saveImage(bitmap));
       JSONArray response = new JSONArray();
       for(int x = 0 ; x < selectedFromCamera.size(); x++)
       {
@@ -171,8 +176,71 @@ public class SlideShowFragment extends Fragment {
     }
   }
 
-  private String saveImage(Bitmap segg) {
+  private Bitmap getBitmap(String path) {
 
+    Uri uri = Uri.fromFile(new File(path));
+    InputStream in = null;
+    try {
+      final int IMAGE_MAX_SIZE = 1200000; // 1.2MP
+      in = getContext().getContentResolver().openInputStream(uri);
+
+      // Decode image size
+      BitmapFactory.Options o = new BitmapFactory.Options();
+      o.inJustDecodeBounds = true;
+      BitmapFactory.decodeStream(in, null, o);
+      in.close();
+
+
+      int scale = 1;
+      while ((o.outWidth * o.outHeight) * (1 / Math.pow(scale, 2)) >
+        IMAGE_MAX_SIZE) {
+        scale++;
+      }
+//      Log.d("", "scale = " + scale + ", orig-width: " + o.outWidth + ", orig-height: " + o.outHeight);
+
+      Bitmap b = null;
+      in = getContext().getContentResolver().openInputStream(uri);
+      if (scale > 1) {
+        scale--;
+        // scale to max possible inSampleSize that still yields an image
+        // larger than target
+        o = new BitmapFactory.Options();
+        o.inSampleSize = scale;
+        b = BitmapFactory.decodeStream(in, null, o);
+
+        // resize to desired dimensions
+        int height = b.getHeight();
+        int width = b.getWidth();
+//        Log.d("", "1th scale operation dimenions - width: " + width + ", height: " + height);
+
+        double y = Math.sqrt(IMAGE_MAX_SIZE
+          / (((double) width) / height));
+        double x = (y / height) * width;
+
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int) x,
+          (int) y, true);
+        b.recycle();
+        b = scaledBitmap;
+
+        System.gc();
+      } else {
+        b = BitmapFactory.decodeStream(in);
+      }
+      in.close();
+
+//      Log.d("", "bitmap size - width: " + b.getWidth() + ", height: " +
+//        b.getHeight());
+      return b;
+    } catch (IOException e) {
+//      Log.e("", e.getMessage(), e);
+      return null;
+    }
+  }
+
+  private String saveImage(Bitmap segg) {
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inSampleSize = 3;
+    options.inJustDecodeBounds = true;
     String path = "";
     OutputStream fOut = null;
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -193,6 +261,7 @@ public class SlideShowFragment extends Fragment {
         file.getAbsolutePath(),
         Toast.LENGTH_LONG).show();
       path = file.getAbsolutePath();
+      BitmapFactory.decodeFile(path, options);
       fOut.flush();
       fOut.close();
     } catch (IOException e) {
@@ -213,6 +282,17 @@ public class SlideShowFragment extends Fragment {
 //    ContentResolver cr = getContext().getContentResolver();
 //    cr.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 //    Toast.makeText(ExtractActivity.this, "The Image thumbnail created in Gallery ", Toast.LENGTH_LONG).show();
+  }
+  public static String savebitmap(Bitmap bmp) throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+    File f = new File(Environment.getExternalStorageDirectory()
+      + File.separator + "testimage.jpg");
+    f.createNewFile();
+    FileOutputStream fo = new FileOutputStream(f);
+    fo.write(bytes.toByteArray());
+    fo.close();
+    return f.getAbsolutePath();
   }
   public void setSelectedIndex(int index, boolean selected) {
     if (selected) {
