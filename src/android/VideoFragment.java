@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -43,7 +44,8 @@ public class VideoFragment extends Fragment {
   private FakeR faker;
   static GridView gallery;
   private ArrayList<String> video;
-  private ArrayList<String> selectedImage;
+  private ArrayList<String> selectedVideo;
+  private ArrayList<Integer> selectedIndex;
   private String selectedFromCamera;
   private Spinner spinner;
 
@@ -52,30 +54,22 @@ public class VideoFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     faker = new FakeR(getContext());
     View view = inflater.inflate(faker.getId("layout","fragment_video"), container, false);
-
+    selectedIndex = new ArrayList<>();
     TextView cancel = view.findViewById(faker.getId("id","cancel"));
     TextView next = view.findViewById(faker.getId("id","next"));
     spinner = view.findViewById(faker.getId("id","spinner"));
 
-    cancel.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        getActivity().finish();
-      }
-    });
+    cancel.setOnClickListener(v -> getActivity().finish());
 
-    next.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        //return all selected images to app.\
-        JSONArray response = new JSONArray();
-        for(int x = 0 ; x < selectedImage.size(); x++)
-        {
-          response.put(selectedImage.get(x));
-        }
-        ImagePicker.callbackContext.success(response);
-        getActivity().finish();
+    next.setOnClickListener(v -> {
+      //return all selected images to app.\
+      JSONArray response = new JSONArray();
+      for(int x = 0 ; x < selectedVideo.size(); x++)
+      {
+        response.put(selectedVideo.get(x));
       }
+      ImagePicker.callbackContext.success(response);
+      getActivity().finish();
     });
 
     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -87,8 +81,8 @@ public class VideoFragment extends Fragment {
 //          getActivity().startActivityForResult(new Intent(MediaStore.ACTION_VIDEO_CAPTURE), 1000);
           //return success callback call videoEffects plugin
 
-			ImagePicker.callbackContext.success("plugin_video_effects");
-			getActivity().finish();
+            ImagePicker.callbackContext.success("plugin_video_effects");
+            getActivity().finish();
         }
       }
 
@@ -100,12 +94,7 @@ public class VideoFragment extends Fragment {
 
     gallery = view.findViewById(faker.getId("id","gallery_grid"));
     gallery.setAdapter(new ImageAdapterGallery(getActivity()));
-    gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getContext(),position,Toast.LENGTH_LONG).show();
-      }
-    });
+    gallery.setOnItemClickListener((parent, view1, position, id) -> Toast.makeText(getContext(),position,Toast.LENGTH_LONG).show());
     return view;
   }
   @Override
@@ -121,13 +110,13 @@ public class VideoFragment extends Fragment {
     }
   }
 
-  public Uri getImageUri(Context inContext, Bitmap inImage) {
+  private Uri getImageUri(Context inContext, Bitmap inImage) {
     String path =
       MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage,
         "Title", null);
     return Uri.parse(path);
   }
-  public String getRealPathFromURI(Context context, Uri contentUri) {
+  private String getRealPathFromURI(Context context, Uri contentUri) {
     Cursor cursor = null;
     try {
       String[] proj = { MediaStore.Images.Media.DATA };
@@ -143,9 +132,9 @@ public class VideoFragment extends Fragment {
   }
   public void setSelectedIndex(int index, boolean selected) {
     if (selected) {
-      selectedImage.add(video.get(index));
+      selectedVideo.add(video.get(index));
     } else {
-      selectedImage.remove(video.get(index));
+      selectedVideo.remove(video.get(index));
     }
   }
 
@@ -156,7 +145,7 @@ public class VideoFragment extends Fragment {
     public ImageAdapterGallery(Activity localContext) {
       context = localContext;
       video = getAllShownImagesPath(context);
-      selectedImage = new ArrayList<>();
+      selectedVideo = new ArrayList<>();
     }
 
     @Override
@@ -197,23 +186,33 @@ public class VideoFragment extends Fragment {
           RelativeLayout.LayoutParams.WRAP_CONTENT,
           RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        final CheckBox checkBox = new CheckBox(getContext());
-        if (selectedImage.contains(video.get(position))) {
+        CheckBox checkBox = new CheckBox(getContext());
+
+        if (selectedVideo.contains(video.get(position))) {
           checkBox.setChecked(true);
           picturesView.setAlpha(0.3f);
         } else {
           checkBox.setChecked(false);
           picturesView.setAlpha(1f);
         }
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            setSelectedIndex(position, isChecked);
-            if(isChecked)
+
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+          if(selectedVideo.size() == 1) {
+            if (selectedVideo.contains(video.get(position))) {
+              checkBox.setChecked(false);
+              picturesView.setAlpha(1f);
+            }else {
+              Toast.makeText(getContext(), "Single Selection Only.", Toast.LENGTH_SHORT).show();
+            }
+          }
+          else {
+            if (isChecked)
               picturesView.setAlpha(0.3f);
             else
               picturesView.setAlpha(1f);
           }
+
+          setSelectedIndex(position, isChecked);
         });
 
         RelativeLayout.LayoutParams playButtonParam = new RelativeLayout.LayoutParams(
@@ -224,16 +223,23 @@ public class VideoFragment extends Fragment {
         checkParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
         picturesView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        picturesView.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            if(selectedImage.contains(video.get(position))){
+        picturesView.setOnClickListener(v -> {
+          if(selectedVideo.size() == 1)
+          {
+            if (selectedVideo.contains(video.get(position))) {
               checkBox.setChecked(false);
               picturesView.setAlpha(1f);
-            }else if(selectedImage.size() == 0){
+            }else {
+              Toast.makeText(getContext(), "Single Selection Only.", Toast.LENGTH_SHORT).show();
+            }
+          }else {
+            if (selectedVideo.contains(video.get(position))) {
+              checkBox.setChecked(false);
+              picturesView.setAlpha(1f);
+            } else if (selectedVideo.size() == 0) {
               checkBox.setChecked(true);
               picturesView.setAlpha(0.3f);
-            }else{
+            } else {
               checkBox.setChecked(true);
               picturesView.setAlpha(0.3f);
             }

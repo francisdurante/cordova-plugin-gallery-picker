@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Context;
 
@@ -67,14 +68,19 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     super.onCreate(savedInstanceState);
     faker = new FakeR(this);
     Intent intent = getIntent();
-    boolean ifComment = intent.getBooleanExtra("ifForComment",false);
-    System.out.println(intent.getBooleanExtra("ifForComment",false) + " aaaaaaaaaaaaaaaaaaaaa");
     setContentView(faker.getId("layout","activity_main_gallery"));
     requestPermission();
     BottomNavigationView navigation = (BottomNavigationView) findViewById(faker.getId("id","navigation"));
-    if(ifComment)
+    if(intent.getStringExtra("PROCESS").equals("comment"))
     {
-      navigation.getMenu().findItem(2).setVisible(false);
+      Menu nav_Menu = navigation.getMenu();
+      nav_Menu.findItem(faker.getId("id","action_pending")).setVisible(false);
+    }
+    else if(intent.getStringExtra("PROCESS").equals("add_photo"))
+    {
+      Menu nav_Menu = navigation.getMenu();
+      nav_Menu.findItem(faker.getId("id","action_pending")).setVisible(false);
+      nav_Menu.findItem(faker.getId("id","action_video")).setVisible(false);
     }
     navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
   }
