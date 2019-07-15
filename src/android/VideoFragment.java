@@ -74,7 +74,6 @@ public class VideoFragment extends Fragment {
           response.put(selectedImage.get(x));
         }
         ImagePicker.callbackContext.success(response);
-        ImagePicker.callbackContext.success(response);
         getActivity().finish();
       }
     });

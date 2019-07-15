@@ -15,7 +15,7 @@
 		</config-file>
 		
 		<config-file parent="/manifest/application" target="AndroidManifest.xml">
-		  <activity android:label="@string/activity_name" android:launchMode="singleTop" android:name="cordova.plugin.gallery.picker.MainActivity" android:theme="@style/Theme.AppCompat" android:windowSoftInputMode="adjustResize"/>
+		  <activity android:label="@string/activity_name" android:launchMode="singleTop" android:name="cordova.plugin.gallery.picker.MainActivity" android:theme="@style/Theme.Gallery" android:windowSoftInputMode="adjustResize"/>
 		</config-file>
 		
 		<config-file parent="/*" target="AndroidManifest.xml">
@@ -50,11 +50,19 @@
 			</string-array>
 		</config-file>
 		<config-file target="res/values/styles.xml" parent="/*">
+			<style name="Theme.Gallery" parent="Theme.AppCompat.Light.NoActionBar">
+				  <item name="colorPrimary">@color/galleryTop</item>
+				  <item name="colorPrimaryDark">@color/galleryTop</item>
+				  <item name="colorAccent">@color/galleryTop</item>
+			</style>
 			<style name="mySpinnerItemStyle" parent="ThemeOverlay.AppCompat.Dark">
 				<item name="android:textColor">#FFF</item>
 				<item name="android:color">#000</item>
 				<item name="android:textSize">20sp</item>
 			</style>
+		</config-file>
+		<config-file target="res/values/colors.xml" parent="/*">
+			<color name="galleryTop">#0215b7</color>
 		</config-file>
 
 	</platform>
