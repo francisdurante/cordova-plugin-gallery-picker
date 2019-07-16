@@ -3,6 +3,7 @@
 	<name>
 		cordova-gallery-picker
 	</name>
+	<dependency id="https://github.com/francisdurante/video-effects"/>
 	<js-module name="cordova-gallery-picker" src="www/cordova-gallery-picker.js">
 		<clobbers target="cordova.plugins" />
 	</js-module>
