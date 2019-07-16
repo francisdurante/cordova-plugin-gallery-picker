@@ -356,11 +356,26 @@ public class SlideShowFragment extends Fragment {
           checkBox.setChecked(false);
           picturesView.setAlpha(1f);
         }
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+          if("comment".equals(MainActivity.process)) {
+            if (selectedImage.size() == 1) {
+              if (selectedImage.contains(images.get(position))) {
+                checkBox.setChecked(false);
+                picturesView.setAlpha(1f);
+              } else {
+                Toast.makeText(getContext(), "Single Selection Only.", Toast.LENGTH_SHORT).show();
+              }
+            }
+            else {
+              if (isChecked)
+                picturesView.setAlpha(0.3f);
+              else
+                picturesView.setAlpha(1f);
+            }
             setSelectedIndex(position, isChecked);
-            if(isChecked)
+          }else {
+            setSelectedIndex(position, isChecked);
+            if (isChecked)
               picturesView.setAlpha(0.3f);
             else
               picturesView.setAlpha(1f);
@@ -371,16 +386,36 @@ public class SlideShowFragment extends Fragment {
         checkParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
         picturesView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        picturesView.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            if(selectedImage.contains(images.get(position))){
+        picturesView.setOnClickListener(v -> {
+          if("comment".equals(MainActivity.process)) {
+            if (selectedImage.size() == 1) {
+              if (selectedImage.contains(images.get(position))) {
+                checkBox.setChecked(false);
+                picturesView.setAlpha(1f);
+              } else {
+                Toast.makeText(getContext(), "Single Selection Only.", Toast.LENGTH_SHORT).show();
+              }
+            }
+            else {
+              if (selectedImage.contains(images.get(position))) {
+                checkBox.setChecked(false);
+                picturesView.setAlpha(1f);
+              } else if (selectedImage.size() == 0) {
+                checkBox.setChecked(true);
+                picturesView.setAlpha(0.3f);
+              } else {
+                checkBox.setChecked(true);
+                picturesView.setAlpha(0.3f);
+              }
+            }
+          }else {
+            if (selectedImage.contains(images.get(position))) {
               checkBox.setChecked(false);
               picturesView.setAlpha(1f);
-            }else if(selectedImage.size() == 0){
+            } else if (selectedImage.size() == 0) {
               checkBox.setChecked(true);
               picturesView.setAlpha(0.3f);
-            }else{
+            } else {
               checkBox.setChecked(true);
               picturesView.setAlpha(0.3f);
             }
