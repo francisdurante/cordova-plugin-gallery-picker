@@ -59,12 +59,26 @@ public class VideoFragment extends Fragment {
     TextView next = view.findViewById(faker.getId("id","next"));
     spinner = view.findViewById(faker.getId("id","spinner"));
 
-    cancel.setOnClickListener(v ->
-    {
+    cancel.setOnClickListener(v -> {
       ImagePicker.callbackContext.error("USER_CANCEL");
       getActivity().finish();
-    }
-      );
+    });
+
+    next.setOnClickListener(v -> {
+      if(selectedVideo.size() != 0) {
+        //return all selected images to app.\
+        JSONArray response = new JSONArray();
+        for (int x = 0; x < selectedVideo.size(); x++) {
+          response.put(selectedVideo.get(x));
+        }
+        ImagePicker.callbackContext.success(response);
+        getActivity().finish();
+      }
+      else
+      {
+        Toast.makeText(getContext(),"Nothing is selected.",Toast.LENGTH_SHORT).show();
+      }
+    });
 
     next.setOnClickListener(v -> {
       //return all selected images to app.\
