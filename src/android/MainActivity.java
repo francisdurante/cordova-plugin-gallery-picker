@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
   private FakeR faker;
   private Context context = this;
   private static final int REQUEST_WRITE_PERMISSION = 411;
+  public static String process  = "all";
 
   @Override
   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     setContentView(faker.getId("layout","activity_main_gallery"));
     requestPermission();
     BottomNavigationView navigation = (BottomNavigationView) findViewById(faker.getId("id","navigation"));
+    process = intent.getStringExtra("PROCESS");
     if(intent.getStringExtra("PROCESS").equals("comment"))
     {
       Menu nav_Menu = navigation.getMenu();
