@@ -105,4 +105,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     Fragment fragment = getSupportFragmentManager().findFragmentById(faker.getId("id", "fragment_container"));
     fragment.onActivityResult(requestCode, resultCode, data);
   }
+
+  @Override
+  public void onBackPressed() {
+    ImagePicker.callbackContext.error("USER_CANCEL");
+    super.onBackPressed();
+  }
 }
