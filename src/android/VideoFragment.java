@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -206,7 +207,7 @@ public class VideoFragment extends Fragment {
           RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         CheckBox checkBox = new CheckBox(getContext());
-
+        checkBox.setClickable(false);
         if (selectedVideo.contains(video.get(position))) {
           checkBox.setChecked(true);
           picturesView.setAlpha(0.3f);
@@ -220,18 +221,26 @@ public class VideoFragment extends Fragment {
             if (selectedVideo.contains(video.get(position))) {
               checkBox.setChecked(false);
               picturesView.setAlpha(1f);
+              setSelectedIndex(position, isChecked);
             }else {
               Toast.makeText(getContext(), "Single Selection Only.", Toast.LENGTH_SHORT).show();
             }
           }
           else {
-            if (isChecked)
-              picturesView.setAlpha(0.3f);
+            if(getFileSize(video.get(position)) <= 25)
+            {
+              if (isChecked)
+                picturesView.setAlpha(0.3f);
+              else
+                picturesView.setAlpha(1f);
+              setSelectedIndex(position, isChecked);
+            }
             else
-              picturesView.setAlpha(1f);
+            {
+              checkBox.setChecked(false);
+              Toast.makeText(getContext(),"File size exceeded the maximum size (25mb)",Toast.LENGTH_SHORT).show();
+            }
           }
-
-          setSelectedIndex(position, isChecked);
         });
 
         RelativeLayout.LayoutParams playButtonParam = new RelativeLayout.LayoutParams(
@@ -243,6 +252,7 @@ public class VideoFragment extends Fragment {
 
         picturesView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         picturesView.setOnClickListener(v -> {
+
           if(selectedVideo.size() == 1)
           {
             if (selectedVideo.contains(video.get(position))) {
@@ -252,16 +262,25 @@ public class VideoFragment extends Fragment {
               Toast.makeText(getContext(), "Single Selection Only.", Toast.LENGTH_SHORT).show();
             }
           }else {
-            if (selectedVideo.contains(video.get(position))) {
-              checkBox.setChecked(false);
-              picturesView.setAlpha(1f);
-            } else if (selectedVideo.size() == 0) {
-              checkBox.setChecked(true);
-              picturesView.setAlpha(0.3f);
-            } else {
-              checkBox.setChecked(true);
-              picturesView.setAlpha(0.3f);
+            int size  = getFileSize(video.get(position));
+            if(getFileSize(video.get(position)) <= 25)
+            {
+              if (selectedVideo.contains(video.get(position))) {
+                checkBox.setChecked(false);
+                picturesView.setAlpha(1f);
+              } else if (selectedVideo.size() == 0) {
+                checkBox.setChecked(true);
+                picturesView.setAlpha(0.3f);
+              } else {
+                checkBox.setChecked(true);
+                picturesView.setAlpha(0.3f);
+              }
             }
+            else
+            {
+              Toast.makeText(getContext(),"File size exceeded the maximum size (25mb)",Toast.LENGTH_SHORT).show();
+            }
+
           }
         });
 
@@ -315,6 +334,11 @@ public class VideoFragment extends Fragment {
         listOfAllImages.add(absolutePathOfImage);
       }
       return listOfAllImages;
+    }
+    public int getFileSize(String path)
+    {
+      File file = new File(path);
+      return Integer.parseInt(String.valueOf(file.length()/1024/1000));
     }
   }
 }

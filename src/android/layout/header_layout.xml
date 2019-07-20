@@ -6,7 +6,7 @@
     android:id="@+id/linear"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#0215b7"
+    android:background="#000000"
     android:weightSum="3"
     android:padding="5sp">
 

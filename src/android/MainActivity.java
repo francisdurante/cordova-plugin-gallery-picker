@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
           case "Video":
             fragment = new VideoFragment();
             break;
+            
+          case "Photos":
+            fragment = new SlideShowFragment();
 
           case "Pending":
             //Pending fragment
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     if(intent.getStringExtra("PROCESS").equals("comment"))
     {
       Menu nav_Menu = navigation.getMenu();
+      nav_Menu.findItem(faker.getId("id","action_slide_show")).setTitle("Photos");
       nav_Menu.findItem(faker.getId("id","action_pending")).setVisible(false);
     }
     else if(intent.getStringExtra("PROCESS").equals("add_photo"))
