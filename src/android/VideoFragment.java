@@ -227,7 +227,7 @@ public class VideoFragment extends Fragment {
             }
           }
           else {
-            if(getFileSize(video.get(position)) <= 25)
+            if(getFileSize(video.get(position)) <= 101)
             {
               if (isChecked)
                 picturesView.setAlpha(0.3f);
@@ -238,7 +238,7 @@ public class VideoFragment extends Fragment {
             else
             {
               checkBox.setChecked(false);
-              Toast.makeText(getContext(),"File size exceeded the maximum size (25mb)",Toast.LENGTH_SHORT).show();
+              Toast.makeText(getContext(),"File size exceeded the maximum size (100mb)",Toast.LENGTH_SHORT).show();
             }
           }
         });

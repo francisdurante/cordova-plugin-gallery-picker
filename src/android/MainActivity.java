@@ -54,12 +54,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
           case "Video":
             fragment = new VideoFragment();
             break;
-            
+
           case "Photos":
             fragment = new SlideShowFragment();
 
           case "Pending":
-            //Pending fragment
+            ImagePicker.callbackContext.success("PENDING");
+            finish();
             break;
         }
 
