@@ -263,7 +263,7 @@ public class VideoFragment extends Fragment {
             }
           }else {
             int size  = getFileSize(video.get(position));
-            if(getFileSize(video.get(position)) <= 25)
+            if(getFileSize(video.get(position)) <= 100)
             {
               if (selectedVideo.contains(video.get(position))) {
                 checkBox.setChecked(false);
@@ -278,7 +278,7 @@ public class VideoFragment extends Fragment {
             }
             else
             {
-              Toast.makeText(getContext(),"File size exceeded the maximum size (25mb)",Toast.LENGTH_SHORT).show();
+              Toast.makeText(getContext(),"File size exceeded the maximum size (100mb)",Toast.LENGTH_SHORT).show();
             }
 
           }
