@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -81,16 +82,16 @@ public class VideoFragment extends Fragment {
       }
     });
 
-    next.setOnClickListener(v -> {
-      //return all selected images to app.\
-      JSONArray response = new JSONArray();
-      for(int x = 0 ; x < selectedVideo.size(); x++)
-      {
-        response.put(selectedVideo.get(x));
-      }
-      ImagePicker.callbackContext.success(response);
-      getActivity().finish();
-    });
+//    next.setOnClickListener(v -> {
+//      //return all selected images to app.\
+//      JSONArray response = new JSONArray();
+//      for(int x = 0 ; x < selectedVideo.size(); x++)
+//      {
+//        response.put(selectedVideo.get(x));
+//      }
+//      ImagePicker.callbackContext.success(response);
+//      getActivity().finish();
+//    });
 
     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
@@ -339,6 +340,10 @@ public class VideoFragment extends Fragment {
     {
       File file = new File(path);
       return Integer.parseInt(String.valueOf(file.length()/1024/1000));
+    }
+    public int getVideoDuration(String path){
+      MediaPlayer media = MediaPlayer.create(context,Uri.parse(path));
+      return media.getDuration();
     }
   }
 }
