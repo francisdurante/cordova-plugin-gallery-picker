@@ -50,6 +50,8 @@ public class VideoFragment extends Fragment {
   private ArrayList<Integer> selectedIndex;
   private String selectedFromCamera;
   private Spinner spinner;
+  private TextView next;
+  private int selectedCount = 0;
 
   @Nullable
   @Override
@@ -58,7 +60,7 @@ public class VideoFragment extends Fragment {
     View view = inflater.inflate(faker.getId("layout","fragment_video"), container, false);
     selectedIndex = new ArrayList<>();
     TextView cancel = view.findViewById(faker.getId("id","cancel"));
-    TextView next = view.findViewById(faker.getId("id","next"));
+    next = view.findViewById(faker.getId("id","next"));
     spinner = view.findViewById(faker.getId("id","spinner"));
 
     cancel.setOnClickListener(v -> {
@@ -66,6 +68,7 @@ public class VideoFragment extends Fragment {
       getActivity().finish();
     });
 
+    next.setText("(" + selectedCount + ") Next");
     next.setOnClickListener(v -> {
       if(selectedVideo.size() != 0) {
         //return all selected images to app.\
@@ -154,8 +157,10 @@ public class VideoFragment extends Fragment {
   public void setSelectedIndex(int index, boolean selected) {
     if (selected) {
       selectedVideo.add(video.get(index));
+      next.setText("(" + (++selectedCount) + ") Next");
     } else {
       selectedVideo.remove(video.get(index));
+      next.setText("(" + (--selectedCount) + ") Next");
     }
   }
 
