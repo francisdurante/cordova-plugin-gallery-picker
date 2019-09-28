@@ -86,7 +86,20 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     else if(intent.getStringExtra("PROCESS").equals("add_photo"))
     {
       Menu nav_Menu = navigation.getMenu();
+      nav_Menu.findItem(faker.getId("id","action_slide_show")).setTitle("Photos");
       nav_Menu.findItem(faker.getId("id","action_pending")).setVisible(false);
+      nav_Menu.findItem(faker.getId("id","action_video")).setVisible(false);
+    }
+    else if(intent.getStringExtra("PROCESS").equals("message"))
+    {
+      Menu nav_Menu = navigation.getMenu();
+      nav_Menu.findItem(faker.getId("id","action_slide_show")).setTitle("Photos");
+      nav_Menu.findItem(faker.getId("id","action_pending")).setVisible(false);
+    }
+    else if(intent.getStringExtra("PROCESS").equals("mycrazysale"))
+    {
+      Menu nav_Menu = navigation.getMenu();
+      nav_Menu.findItem(faker.getId("id","action_slide_show")).setTitle("Photos");
       nav_Menu.findItem(faker.getId("id","action_video")).setVisible(false);
     }
     navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
