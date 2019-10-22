@@ -15,7 +15,7 @@
 		</config-file>
 		
 		<config-file parent="/manifest/application" target="AndroidManifest.xml">
-		  <activity android:label="@string/activity_name" android:launchMode="singleTop" android:name="cordova.plugin.gallery.picker.MainActivity" android:theme="@style/Theme.Gallery" android:windowSoftInputMode="adjustResize"/>
+		  <activity android:label="@string/activity_name" android:launchMode="singleTop" android:name="cordova.plugin.gallery.picker.MainActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" android:windowSoftInputMode="adjustResize"/>
 		</config-file>
 		
 		<config-file parent="/*" target="AndroidManifest.xml">
