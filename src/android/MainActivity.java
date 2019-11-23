@@ -102,6 +102,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
       nav_Menu.findItem(faker.getId("id","action_slide_show")).setTitle("Photos");
       nav_Menu.findItem(faker.getId("id","action_video")).setVisible(false);
     }
+    else if(intent.getStringExtra("PROCESS").equals("profile"))
+    {
+      Menu nav_Menu = navigation.getMenu();
+      nav_Menu.findItem(faker.getId("id","action_slide_show")).setTitle("Photos");
+      nav_Menu.findItem(faker.getId("id","action_pending")).setVisible(false);
+      nav_Menu.findItem(faker.getId("id","action_video")).setVisible(false);
+    }
     navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
   }
 
