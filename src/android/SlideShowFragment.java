@@ -196,7 +196,7 @@ public class SlideShowFragment extends Fragment {
         }
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
           if("comment".equals(MainActivity.process) || "profile".equals(MainActivity.process)) {
-            if (selectedImage.size() == 1) {
+            if (selectedImage.size() == 0){
               if (selectedImage.contains(images.get(position))) {
                 checkBox.setChecked(false);
                 picturesView.setAlpha(1f);
