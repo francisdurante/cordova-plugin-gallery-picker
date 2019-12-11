@@ -225,7 +225,7 @@ public class SlideShowFragment extends Fragment {
 
         picturesView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         picturesView.setOnClickListener(v -> {
-          if("comment".equals(MainActivity.process)) {
+          if("comment".equals(MainActivity.process) || "profile".equals(MainActivity.process)) {
             if (selectedImage.size() == 1) {
               if (selectedImage.contains(images.get(position))) {
                 checkBox.setChecked(false);
